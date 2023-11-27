@@ -260,16 +260,13 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
             $boolError = true;
         }
 
-        $actionParams = [];
         if (!$boolError) {
             $actionParams = [
                 'PROPERTY' => (string)$arOneCondition['Property'],
                 'UNIT' => $unit,
                 'LIMIT_VALUE' => $arOneCondition['Max'] ? (int)$arOneCondition['Max'] : 0,
             ];
-        }
 
-        if (!$boolError) {
             if (!empty($arSubs)) {
                 $filter = '$saleact'.$arParams['FUNC_ID'];
 
@@ -314,7 +311,6 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     . self::endGenerate()
                 ;
             }
-
             unset($actionParams, $unit);
         }
 
