@@ -1,0 +1,16 @@
+{
+    "name": "intensa/discounts",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Intensa\\Discounts\\": "lib/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Михаил Селиванов",
+            "email": "mixalin17@yandex.ru"
+        }
+    ],
+    "require": {}
+}
