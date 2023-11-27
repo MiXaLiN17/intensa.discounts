@@ -7,9 +7,6 @@ if (class_exists('intensa_discounts')) {
 
 use Bitrix\Main\EventManager;
 use Bitrix\Main\Localization\Loc;
-use Bitrix\Main\Loader;
-use Intensa\EventController;
-use Bitrix\Main\ModuleManager;
 
 Loc::loadMessages(__FILE__);
 
@@ -32,6 +29,7 @@ class intensa_discounts extends CModule
 
         $this->MODULE_NAME = Loc::getMessage('INTENSA_DISCOUNTS_MODULE_NAME');
         $this->MODULE_DESCRIPTION = Loc::getMessage('INTENSA_DISCOUNTS_MODULE_DESCRIPTION');
+
         $this->PARTNER_NAME = Loc::getMessage('INTENSA_DISCOUNTS_PARTNER_NAME');
         $this->PARTNER_URI = Loc::getMessage('INTENSA_DISCOUNTS_PARTNER_URI');
     }
@@ -52,7 +50,7 @@ class intensa_discounts extends CModule
 
     public function installEvents()
     {
-        \Bitrix\Main\EventManager::getInstance()->registerEventHandler(
+        EventManager::getInstance()->registerEventHandler(
             'sale',
             'OnCondSaleActionsControlBuildList',
             $this->MODULE_ID,
@@ -63,7 +61,7 @@ class intensa_discounts extends CModule
 
     public function unInstallEvents()
     {
-        \Bitrix\Main\EventManager::getInstance()->unRegisterEventHandler(
+        EventManager::getInstance()->unRegisterEventHandler(
             'sale',
             'OnCondSaleActionsControlBuildList',
             $this->MODULE_ID,
