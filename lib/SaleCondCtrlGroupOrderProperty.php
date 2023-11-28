@@ -133,9 +133,9 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     'name' => 'extra_unit',
                     'type' => 'select',
                     'values' => [
-                        self::VALUE_UNIT_PERCENT => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_PERCENT'),
+                        self::VALUE_UNIT_SUMM => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_CUR_ALL'),
                         self::VALUE_UNIT_CURRENCY => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_CUR_EACH'),
-                        self::VALUE_UNIT_SUMM => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_CUR_ALL')
+                        self::VALUE_UNIT_PERCENT => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_PERCENT')
                     ],
                     'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_UNIT_DEF'),
                     'defaultValue' => self::VALUE_UNIT_SUMM,
