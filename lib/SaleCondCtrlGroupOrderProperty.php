@@ -32,7 +32,6 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
     }
 
     /**
-     * метод закончен
      * @param $arParams
      * @return array
      */
@@ -81,17 +80,17 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
         return [
             'controlId' => static::GetControlID(),
             'group' => true,
-            'label' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_LABEL'),
-            'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_DEF_TEXT'),
+            'label' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_LABEL'),
+            'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_DEF_TEXT'),
             'showIn' => static::GetShowIn($arParams['SHOW_IN_GROUPS']),
             'visual' => static::GetVisual(),
             'control' => [
-                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PREFIX'),
+                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_PREFIX'),
                 $arAtoms['Property'],
                 $arAtoms['Unit'],
-                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_MAX_DISCOUNT_GROUP_BASKET_DESCR'),
+                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_MAX_DISCOUNT_GROUP_ORDER_PROPERTY_DESCR'),
                 $arAtoms['Max'],
-                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_DESCR_EXT'),
+                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_DESCR_EXT'),
                 $arAtoms['All'],
                 $arAtoms['True']
             ],
@@ -133,11 +132,11 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     'name' => 'extra_unit',
                     'type' => 'select',
                     'values' => [
-                        self::VALUE_UNIT_SUMM => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_CUR_ALL'),
-                        self::VALUE_UNIT_CURRENCY => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_CUR_EACH'),
-                        self::VALUE_UNIT_PERCENT => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_PERCENT')
+                        self::VALUE_UNIT_SUMM => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_CUR_ALL'),
+                        self::VALUE_UNIT_CURRENCY => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_CUR_EACH'),
+                        self::VALUE_UNIT_PERCENT => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_PERCENT')
                     ],
-                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_UNIT_DEF'),
+                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_UNIT_DEF'),
                     'defaultValue' => self::VALUE_UNIT_SUMM,
                     'first_option' => '...'
                 ],
@@ -168,10 +167,10 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     'name' => 'aggregator',
                     'type' => 'select',
                     'values' => [
-                        'AND' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_ALL_EXT'),
-                        'OR' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_ANY_EXT')
+                        'AND' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_ALL_EXT'),
+                        'OR' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_ANY_EXT')
                     ],
-                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_DEF'),
+                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_DEF'),
                     'defaultValue' => 'AND',
                     'first_option' => '...'
                 ],
@@ -189,8 +188,8 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     'name' => 'value',
                     'type' => 'select',
                     'values' => [
-                        'True' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_TRUE'),
-                        'False' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_SELECT_FALSE')
+                        'True' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_TRUE'),
+                        'False' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_FALSE')
                     ],
                     'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_CLOBAL_COND_GROUP_SELECT_DEF'),
                     'defaultValue' => 'True',

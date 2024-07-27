@@ -27,7 +27,7 @@ class SaleCondCtrlGroupOrderPropertyAction extends \Bitrix\Sale\Discount\Actions
             return;
         }
 
-        $personTypeId = (int)$order['PERSON_TYPE_ID'];
+        $personTypeId = (int) $order['PERSON_TYPE_ID'];
 
         if (!$personTypeId) {
             return;
@@ -40,7 +40,7 @@ class SaleCondCtrlGroupOrderPropertyAction extends \Bitrix\Sale\Discount\Actions
         }
 
         $value = $order['ORDER_PROP']
-            ? ($order['ORDER_PROP'][$propertyId] ? (float)$order['ORDER_PROP'][$propertyId] : 0)
+            ? ($order['ORDER_PROP'][$propertyId] ? (float) $order['ORDER_PROP'][$propertyId] : 0)
             : 0;
 
         if ($value === 0) {
@@ -75,7 +75,7 @@ class SaleCondCtrlGroupOrderPropertyAction extends \Bitrix\Sale\Discount\Actions
         ]);
 
         if ($res = $iterator->fetch()) {
-            return (int)$res['ID'];
+            return (int) $res['ID'];
         }
 
         return false;
