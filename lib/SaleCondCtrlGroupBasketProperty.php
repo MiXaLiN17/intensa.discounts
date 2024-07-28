@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Intensa\Discounts;
 
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Sale\Discount\Actions;
 
-class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
+class SaleCondCtrlGroupBasketProperty extends \CSaleActionCtrlBasketGroup
 {
     public static function GetClassName()
     {
@@ -15,13 +16,13 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
 
     public static function GetControlID()
     {
-        return 'SaleCondCtrlGroupOrderPropertyAction';
+        return 'SaleCondCtrlGroupBasketProperty';
     }
 
     public static function GetControlDescr()
     {
         $description = parent::GetControlDescr();
-        $description['SORT'] = 50;
+        $description['SORT'] = 60;
 
         return $description;
     }
@@ -46,11 +47,6 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     static::$arInitParams['CURRENCY'],
                     $arAtoms['Unit']['values'][self::VALUE_UNIT_CURRENCY]
                 );
-                $arAtoms['Unit']['values'][self::VALUE_UNIT_SUMM] = str_replace(
-                    '#CUR#',
-                    static::$arInitParams['CURRENCY'],
-                    $arAtoms['Unit']['values'][self::VALUE_UNIT_SUMM]
-                );
                 $boolCurrency = true;
             } elseif (isset(static::$arInitParams['SITE_ID'])) {
                 $strCurrency = \Bitrix\Sale\Internals\SiteCurrencyTable::getSiteCurrency(static::$arInitParams['SITE_ID']);
@@ -61,12 +57,6 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                         $arAtoms['Unit']['values'][self::VALUE_UNIT_CURRENCY]
                     );
 
-                    $arAtoms['Unit']['values'][self::VALUE_UNIT_SUMM] = str_replace(
-                        '#CUR#',
-                        $strCurrency,
-                        $arAtoms['Unit']['values'][self::VALUE_UNIT_SUMM]
-                    );
-
                     $boolCurrency = true;
                 }
             }
@@ -74,30 +64,23 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
 
         if (!$boolCurrency) {
             unset($arAtoms['Unit']['values'][self::VALUE_UNIT_CURRENCY]);
-            unset($arAtoms['Unit']['values'][self::VALUE_UNIT_SUMM]);
         }
 
         return [
             'controlId' => static::GetControlID(),
-            'group' => true,
-            'label' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_LABEL'),
-            'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_DEF_TEXT'),
+            'group' => false,
+            'label' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_LABEL'),
+            'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_DEF_TEXT'),
             'showIn' => static::GetShowIn($arParams['SHOW_IN_GROUPS']),
             'visual' => static::GetVisual(),
             'control' => [
-                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_PREFIX'),
+                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_PREFIX'),
+                $arAtoms['Type'],
+                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_POSTFIX'),
                 $arAtoms['Property'],
                 $arAtoms['Unit'],
-                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_MAX_DISCOUNT_GROUP_ORDER_PROPERTY_DESCR'),
-                $arAtoms['Max'],
-                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_DESCR_EXT'),
-                $arAtoms['All'],
-                $arAtoms['True']
-            ],
-            'mess' => [
-                'ADD_CONTROL' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_SUBACT_ADD_CONTROL'),
-                'SELECT_CONTROL' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_SUBACT_SELECT_CONTROL'),
-                'DELETE_CONTROL' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_DELETE_CONTROL')
+                Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_MAX_DISCOUNT_GROUP_BASKET_PROPERTY_DESCR'),
+                $arAtoms['Max']
             ]
         ];
     }
@@ -113,6 +96,28 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
         $boolEx = (true === $boolEx ? true : false);
 
         $arAtomList = [
+            'Type' => array(
+                'JS' => array(
+                    'id' => 'Type',
+                    'name' => 'extra',
+                    'type' => 'select',
+                    'values' => array(
+                        self::ACTION_TYPE_DISCOUNT => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_TYPE_DISCOUNT'),
+                        self::ACTION_TYPE_EXTRA => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_TYPE_EXTRA'),
+                        self::ACTION_TYPE_CLOSEOUT => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_TYPE_CLOSEOUT_EXT')
+                    ),
+                    'defaultText' => Loc::getMessage('BT_SALE_ACT_GROUP_BASKET_SELECT_TYPE_DEF'),
+                    'defaultValue' => self::ACTION_TYPE_DISCOUNT,
+                    'first_option' => '...'
+                ),
+                'ATOM' => array(
+                    'ID' => 'Type',
+                    'FIELD_TYPE' => 'string',
+                    'FIELD_LENGTH' => 255,
+                    'MULTIPLE' => 'N',
+                    'VALIDATE' => 'list'
+                )
+            ),
             'Property' => [
                 'JS' => [
                     'id' => 'Property',
@@ -132,12 +137,11 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     'name' => 'extra_unit',
                     'type' => 'select',
                     'values' => [
-                        self::VALUE_UNIT_SUMM => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_CUR_ALL'),
-                        self::VALUE_UNIT_CURRENCY => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_CUR_EACH'),
-                        self::VALUE_UNIT_PERCENT => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_PERCENT')
+                        self::VALUE_UNIT_CURRENCY => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_CUR_EACH'),
+                        self::VALUE_UNIT_PERCENT => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_PERCENT')
                     ],
-                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_UNIT_DEF'),
-                    'defaultValue' => self::VALUE_UNIT_SUMM,
+                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_UNIT_DEF'),
+                    'defaultValue' => self::VALUE_UNIT_CURRENCY,
                     'first_option' => '...'
                 ],
                 'ATOM' => [
@@ -160,17 +164,17 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     'MULTIPLE' => 'N',
                     'VALIDATE' => ''
                 ]
-            ],
+            ]/*,
             'All' => [
                 'JS' => [
                     'id' => 'All',
                     'name' => 'aggregator',
                     'type' => 'select',
                     'values' => [
-                        'AND' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_ALL_EXT'),
-                        'OR' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_ANY_EXT')
+                        'AND' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_ALL_EXT'),
+                        'OR' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_ANY_EXT')
                     ],
-                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_DEF'),
+                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_DEF'),
                     'defaultValue' => 'AND',
                     'first_option' => '...'
                 ],
@@ -188,8 +192,8 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     'name' => 'value',
                     'type' => 'select',
                     'values' => [
-                        'True' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_TRUE'),
-                        'False' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_ORDER_PROPERTY_SELECT_FALSE')
+                        'True' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_TRUE'),
+                        'False' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_FALSE')
                     ],
                     'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_CLOBAL_COND_GROUP_SELECT_DEF'),
                     'defaultValue' => 'True',
@@ -202,7 +206,7 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
                     'MULTIPLE' => 'N',
                     'VALIDATE' => 'list'
                 ]
-            ]
+            ]*/
         ];
 
         if (!$boolEx) {
@@ -223,7 +227,6 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
 
     public static function Generate($arOneCondition, $arParams, $arControl, $arSubs = false)
     {
-        $mxResult = '';
         $boolError = false;
 
         foreach (static::GetAtomsEx(false, false) as $atom) {
@@ -237,17 +240,32 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
             $boolError = true;
         }
 
+        $type = '';
+        if (!$boolError) {
+            switch ($arOneCondition['Type']) {
+                case self::ACTION_TYPE_DISCOUNT:
+                    $type = self::ACTION_TYPE_DISCOUNT;
+                    break;
+                case self::ACTION_TYPE_EXTRA:
+                    $type = self::ACTION_TYPE_EXTRA;
+                    break;
+                case self::ACTION_TYPE_CLOSEOUT:
+                    $type = self::ACTION_TYPE_CLOSEOUT;
+                    break;
+                default:
+                    $boolError = true;
+                    break;
+            }
+        }
+
         $unit = '';
         if (!$boolError) {
             switch ($arOneCondition['Unit']) {
                 case self::VALUE_UNIT_PERCENT:
-                    $unit = \Bitrix\Sale\Discount\Actions::VALUE_TYPE_PERCENT;
+                    $unit = Actions::VALUE_TYPE_PERCENT;
                     break;
                 case self::VALUE_UNIT_CURRENCY:
-                    $unit = \Bitrix\Sale\Discount\Actions::VALUE_TYPE_FIX;
-                    break;
-                case self::VALUE_UNIT_SUMM:
-                    $unit = \Bitrix\Sale\Discount\Actions::VALUE_TYPE_SUMM;
+                    $unit = Actions::VALUE_TYPE_FIX;
                     break;
                 default:
                     $boolError = true;
@@ -259,71 +277,33 @@ class SaleCondCtrlGroupOrderProperty extends \CSaleActionCtrlBasketGroup
             $boolError = true;
         }
 
-        if (!$boolError) {
-            $actionParams = [
-                'PROPERTY' => (string)$arOneCondition['Property'],
-                'UNIT' => $unit,
-                'LIMIT_VALUE' => $arOneCondition['Max'] ? (int)$arOneCondition['Max'] : 0,
-            ];
-
-            if (!empty($arSubs)) {
-                $filter = '$saleact'.$arParams['FUNC_ID'];
-
-                if ($arOneCondition['All'] == 'AND') {
-                    $prefix = '';
-                    $logic = ' && ';
-                    $itemPrefix = ($arOneCondition['True'] == 'True' ? '' : '!');
-                } else {
-                    $itemPrefix = '';
-                    if ($arOneCondition['True'] == 'True') {
-                        $prefix = '';
-                        $logic = ' || ';
-                    } else {
-                        $prefix = '!';
-                        $logic = ' && ';
-                    }
-                }
-
-                $commandLine = $itemPrefix . implode($logic . $itemPrefix, $arSubs);
-
-                if ($prefix != '') {
-                    $commandLine = $prefix.'('.$commandLine.')';
-                }
-
-                $mxResult = self::startGenerate();
-                $mxResult .= $filter.'=function($row){';
-                $mxResult .= 'return ('.$commandLine.');';
-                $mxResult .= '};';
-                $mxResult .=  '\\' . __NAMESPACE__ . '\\SaleCondCtrlGroupOrderPropertyAction::applyToBasket('
-                    . $arParams['ORDER']
-                    . ', ' . var_export($actionParams, true)
-                    . ', '.$filter.');'
-                    .self::endGenerate()
-                ;
-                unset($filter);
-            } else {
-                $mxResult = self::startGenerate()
-                    . '\\'. __NAMESPACE__ . '\\SaleCondCtrlGroupOrderPropertyAction::applyToBasket('
-                    . $arParams['ORDER'] . ', '
-                    . var_export($actionParams, true)
-                    . ', "");'
-                    . self::endGenerate()
-                ;
-            }
-            unset($actionParams, $unit);
+        if ($type === self::ACTION_TYPE_CLOSEOUT && $unit === Actions::VALUE_TYPE_PERCENT) {
+            $boolError = true;
         }
 
         if ($boolError) {
             return false;
         }
 
+        $actionParams = [
+            'PROPERTY' => (string) $arOneCondition['Property'],
+            'TYPE' => $type,
+            'UNIT' => $unit,
+            'LIMIT_VALUE' => $arOneCondition['Max'] ? (int)$arOneCondition['Max'] : 0,
+        ];
+
+        $mxResult = self::startGenerate()
+            . '\\'. __NAMESPACE__ . '\\SaleCondCtrlGroupBasketPropertyAction::applyToBasket('
+            . $arParams['ORDER'] . ', '
+            . var_export($actionParams, true)
+            . ', "");'
+            . self::endGenerate()
+        ;
+        unset($actionParams, $unit, $type);
+
         $result = [
             'COND' => $mxResult,
         ];
-
-        if ($arOneCondition['Unit'] === self::VALUE_UNIT_SUMM) {
-            $result['OVERWRITE_CONTROL'] = array('EXECUTE_MODULE' => 'sale');
-        }
 
         return $result;
     }
