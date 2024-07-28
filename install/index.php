@@ -57,6 +57,14 @@ class intensa_discounts extends CModule
             \Intensa\Discounts\SaleCondCtrlGroupOrderProperty::class,
             'GetControlDescr'
         );
+
+        EventManager::getInstance()->registerEventHandler(
+            'sale',
+            'OnCondSaleActionsControlBuildList',
+            $this->MODULE_ID,
+            \Intensa\Discounts\SaleCondCtrlGroupBasketProperty::class,
+            'GetControlDescr'
+        );
     }
 
     public function unInstallEvents()
@@ -66,6 +74,14 @@ class intensa_discounts extends CModule
             'OnCondSaleActionsControlBuildList',
             $this->MODULE_ID,
             \Intensa\Discounts\SaleCondCtrlGroupOrderProperty::class,
+            'GetControlDescr'
+        );
+
+        EventManager::getInstance()->unRegisterEventHandler(
+            'sale',
+            'OnCondSaleActionsControlBuildList',
+            $this->MODULE_ID,
+            \Intensa\Discounts\SaleCondCtrlGroupBasketProperty::class,
             'GetControlDescr'
         );
     }
