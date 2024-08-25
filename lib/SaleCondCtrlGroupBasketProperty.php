@@ -164,49 +164,7 @@ class SaleCondCtrlGroupBasketProperty extends \CSaleActionCtrlBasketGroup
                     'MULTIPLE' => 'N',
                     'VALIDATE' => ''
                 ]
-            ]/*,
-            'All' => [
-                'JS' => [
-                    'id' => 'All',
-                    'name' => 'aggregator',
-                    'type' => 'select',
-                    'values' => [
-                        'AND' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_ALL_EXT'),
-                        'OR' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_ANY_EXT')
-                    ],
-                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_DEF'),
-                    'defaultValue' => 'AND',
-                    'first_option' => '...'
-                ],
-                'ATOM' => [
-                    'ID' => 'All',
-                    'FIELD_TYPE' => 'string',
-                    'FIELD_LENGTH' => 255,
-                    'MULTIPLE' => 'N',
-                    'VALIDATE' => 'list'
-                ]
-            ],
-            'True' => [
-                'JS' => [
-                    'id' => 'True',
-                    'name' => 'value',
-                    'type' => 'select',
-                    'values' => [
-                        'True' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_TRUE'),
-                        'False' => Loc::getMessage('INTENSA_DISCOUNTS_SALE_ACT_GROUP_BASKET_PROPERTY_SELECT_FALSE')
-                    ],
-                    'defaultText' => Loc::getMessage('INTENSA_DISCOUNTS_CLOBAL_COND_GROUP_SELECT_DEF'),
-                    'defaultValue' => 'True',
-                    'first_option' => '...'
-                ],
-                'ATOM' => [
-                    'ID' => 'True',
-                    'FIELD_TYPE' => 'string',
-                    'FIELD_LENGTH' => 255,
-                    'MULTIPLE' => 'N',
-                    'VALIDATE' => 'list'
-                ]
-            ]*/
+            ]
         ];
 
         if (!$boolEx) {
